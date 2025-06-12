@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberSafe Adventures</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2c003e);
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -15,30 +17,46 @@
             min-height: 100vh;
             margin: 0;
             text-align: center;
+            overflow-x: hidden;
         }
         .container {
-            background-color: #2a2a2a;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 600px;
-            width: 90%;
+            background: linear-gradient(135deg, #2a2a2a, #1c2526);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 700px;
+            width: 95%;
+            box-shadow: 0 8px 32px rgba(0, 204, 255, 0.2);
+            margin: 20px;
         }
         h1 {
             color: #00ccff;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #ff00ff;
+            font-weight: 600;
+            font-size: 1.5em;
         }
         button {
-            background-color: #00ccff;
+            background: linear-gradient(45deg, #00ccff, #ff00ff);
             border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #ffffff;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         button:hover {
-            background-color: #0099cc;
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 0 15px rgba(0, 204, 255, 0.7);
+        }
+        button:active {
+            transform: scale(0.95);
         }
         .wrong {
             animation: shake 0.3s;
@@ -51,34 +69,92 @@
             100% { transform: translateX(0); }
         }
         #passwordTester, #feedback, #leaderboard {
-            margin-top: 20px;
+            margin-top: 25px;
         }
         input {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 8px;
             border: none;
-            width: 80%;
+            width: 85%;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            font-size: 1em;
+            transition: box-shadow 0.2s;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+        }
+        input::placeholder {
+            color: #aaaaaa;
         }
         .progress-bar {
             width: 100%;
             background-color: #444;
-            border-radius: 5px;
+            border-radius: 10px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 15px 0;
+            box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
         }
         .progress {
             height: 20px;
-            background-color: #00ccff;
+            background: linear-gradient(90deg, #00ccff, #ff00ff);
             width: 0%;
-            transition: width 0.5s;
+            transition: width 0.5s ease-in-out;
         }
         .fade-in {
-            animation: fadeIn 1s;
+            animation: fadeIn 1s ease-in-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #timer.low-time {
+            color: #ff0000;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        #feedback {
+            background-color: rgba(0, 204, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 204, 255, 0.3);
+        }
+        #leaderboard ul {
+            list-style: none;
+            padding: 0;
+        }
+        #leaderboard li {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        label {
+            font-size: 0.9em;
+            color: #cccccc;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            button {
+                padding: 10px 18px;
+                font-size: 1em;
+            }
+            input {
+                width: 90%;
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
@@ -97,6 +173,8 @@
             </div>
             <p id="scenarioText"></p>
             <p id="timer">Time left: 30s</p>
+            <p id="streak">Streak: 0</p>
+            <button onclick="useHint()">Use Hint (-5 points, 1 left)</button>
         </div>
         <div id="passwordTester" style="display: none;">
             <p>Test a password's strength:</p>
@@ -118,6 +196,9 @@
         let difficulty = 'easy';
         let timeLeft = 30;
         let timerInterval;
+        let streak = 0;
+        let hintsUsed = 0;
+        const maxHints = 1;
         const clickSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_5b8b3a6b9b.mp3');
         const winSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_3f3b3b3b3b.mp3');
 
@@ -127,60 +208,99 @@
                 options: [
                     { text: "Click the link", result: "You’ve been phished! This could install malware. (-10 points)", points: -10 },
                     { text: "Delete the email", result: "Good choice! Deleting avoids the risk. (+5 points)", points: 5 },
-                    { text: "Report it", result: "Best move! Reporting helps stop scams. (+10 points)", points: 10 }
-                ]
+                    { text: "Report it", result: "Best move! Reporting helps stop scams. (+10 points)", points: 10 },
+                    { text: "Reply to verify", result: "Risky! Engaging with scams can expose you. (-5 points)", points: -5 }
+                ],
+                hint: "Check the sender’s email address before acting."
             },
             {
                 text: "You’re on public Wi-Fi. Do you log into your bank account?",
                 options: [
                     { text: "Yes, it’s urgent", result: "Risky! Public Wi-Fi can expose your data. (-10 points)", points: -10 },
                     { text: "No, I’ll wait", result: "Smart! Waiting keeps your info safe. (+10 points)", points: 10 },
-                    { text: "Use a VPN first", result: "Excellent! A VPN encrypts your connection. (+15 points)", points: 15 }
-                ]
+                    { text: "Use a VPN first", result: "Excellent! A VPN encrypts your connection. (+15 points)", points: 15 },
+                    { text: "Check the Wi-Fi security", result: "Good effort, but not enough! Always use a VPN. (+5 points)", points: 5 }
+                ],
+                hint: "Public Wi-Fi is often unencrypted, making VPNs essential."
             },
             {
                 text: "Your friend asks for your Netflix password. Do you share it?",
                 options: [
                     { text: "Yes, they’re my friend", result: "Uh-oh! Sharing passwords risks your account. (-5 points)", points: -5 },
                     { text: "No, I keep it private", result: "Great! Unique passwords protect you. (+10 points)", points: 10 },
-                    { text: "Suggest they get their own", result: "Perfect! Encouraging security is key. (+15 points)", points: 15 }
-                ]
+                    { text: "Suggest they get their own", result: "Perfect! Encouraging security is key. (+15 points)", points: 15 },
+                    { text: "Change it afterward", result: "Not bad, but avoid sharing altogether. (+5 points)", points: 5 }
+                ],
+                hint: "Sharing passwords can lead to account compromise."
             },
             {
                 text: "A pop-up says your computer is infected and demands payment. What do you do?",
                 options: [
                     { text: "Pay the ransom", result: "Bad idea! This is likely a scam. (-15 points)", points: -15 },
                     { text: "Close the pop-up", result: "Good move! Closing avoids interaction. (+5 points)", points: 5 },
-                    { text: "Run an antivirus scan", result: "Smart! Verify with trusted software. (+10 points)", points: 10 }
-                ]
+                    { text: "Run an antivirus scan", result: "Smart! Verify with trusted software. (+10 points)", points: 10 },
+                    { text: "Restart your computer", result: "Decent, but always scan for threats. (+5 points)", points: 5 }
+                ],
+                hint: "Pop-ups demanding payment are often ransomware scams."
             },
             {
                 text: "You need to update your software. Where do you download it from?",
                 options: [
                     { text: "A random website", result: "Dangerous! Unverified sources may contain malware. (-10 points)", points: -10 },
                     { text: "Official website", result: "Correct! Always use trusted sources. (+10 points)", points: 10 },
-                    { text: "Check for auto-updates", result: "Best choice! Auto-updates are safest. (+15 points)", points: 15 }
-                ]
+                    { text: "Check for auto-updates", result: "Best choice! Auto-updates are safest. (+15 points)", points: 15 },
+                    { text: "Ask a friend for the file", result: "Risky! Files from others may be unsafe. (-5 points)", points: -5 }
+                ],
+                hint: "Only download software from official or verified sources."
             },
             {
                 text: "You get a call claiming your account is compromised. They ask for your PIN. What do you do?",
                 options: [
                     { text: "Give them the PIN", result: "Oh no! Never share sensitive info. (-15 points)", points: -15 },
                     { text: "Hang up", result: "Good call! Avoid unknown callers. (+5 points)", points: 5 },
-                    { text: "Verify with your bank", result: "Perfect! Always confirm directly. (+15 points)", points: 15 }
-                ]
+                    { text: "Verify with your bank", result: "Perfect! Always confirm directly. (+15 points)", points: 15 },
+                    { text: "Ask for their ID", result: "Not enough! Scammers can fake IDs. (-5 points)", points: -5 }
+                ],
+                hint: "Banks never ask for sensitive info over unsolicited calls."
+            },
+            {
+                text: "A website asks for your email and password to continue. What do you do?",
+                options: [
+                    { text: "Enter your details", result: "Risky! Unverified sites may steal your info. (-10 points)", points: -10 },
+                    { text: "Check the URL", result: "Smart! Verify the site’s authenticity. (+10 points)", points: 10 },
+                    { text: "Use a password manager", result: "Great! Unique passwords are safer. (+15 points)", points: 15 },
+                    { text: "Close the tab", result: "Safe choice! Avoid unknown sites. (+5 points)", points: 5 }
+                ],
+                hint: "Always verify the website’s URL and use unique passwords."
+            },
+            {
+                text: "You find a USB drive in a parking lot. What do you do?",
+                options: [
+                    { text: "Plug it in to check", result: "Dangerous! Unknown USBs can carry malware. (-15 points)", points: -15 },
+                    { text: "Ignore it", result: "Good call! Avoiding it keeps you safe. (+5 points)", points: 5 },
+                    { text: "Report it to IT", result: "Best move! Let professionals handle it. (+15 points)", points: 15 },
+                    { text: "Format it first", result: "Risky! Formatting may not remove all threats. (-5 points)", points: -5 }
+                ],
+                hint: "Unknown USB drives are a common malware delivery method."
             }
         ];
 
         function startGame(selectedDifficulty) {
             difficulty = selectedDifficulty;
-            score = 0;
-            scenarioIndex = 0;
+            resetGameState();
             document.getElementById("difficulty").style.display = "none";
             document.getElementById("game").style.display = "block";
             document.getElementById("feedback").innerHTML = "";
             showScenario();
             playSound(clickSound);
+        }
+
+        function resetGameState() {
+            score = 0;
+            scenarioIndex = 0;
+            streak = 0;
+            hintsUsed = 0;
+            clearInterval(timerInterval);
         }
 
         function showScenario() {
@@ -192,9 +312,12 @@
             setTimeout(() => gameDiv.classList.remove("fade-in"), 1000);
             document.getElementById("scenarioText").innerText = scenario.text;
             document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
+            document.getElementById("streak").innerText = `Streak: ${streak}`;
             gameDiv.innerHTML = `<div class="progress-bar"><div class="progress" id="progress"></div></div>
                                 <p id="scenarioText">${scenario.text}</p>
-                                <p id="timer">Time left: ${timeLeft}s</p>`;
+                                <p id="timer">Time left: ${timeLeft}s</p>
+                                <p id="streak">Streak: ${streak}</p>
+                                <button onclick="useHint()" ${hintsUsed >= maxHints ? 'disabled' : ''}>Use Hint (-5 points, ${maxHints - hintsUsed} left)</button>`;
             scenario.options.forEach((option, index) => {
                 const btn = document.createElement("button");
                 btn.innerText = option.text;
@@ -208,7 +331,13 @@
         function startTimer() {
             timerInterval = setInterval(() => {
                 timeLeft--;
-                document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
+                const timerElement = document.getElementById("timer");
+                timerElement.innerText = `Time left: ${timeLeft}s`;
+                if (timeLeft <= 5) {
+                    timerElement.classList.add("low-time");
+                } else {
+                    timerElement.classList.remove("low-time");
+                }
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     selectOption({ result: "Time’s up! You missed the chance to act. (-5 points)", points: -5 });
@@ -221,13 +350,32 @@
             document.getElementById("progress").style.width = `${progress}%`;
         }
 
+        function useHint() {
+            if (hintsUsed >= maxHints) return;
+            hintsUsed++;
+            score -= 5;
+            const scenario = scenarios[scenarioIndex];
+            document.getElementById("feedback").innerHTML = `<p>Hint: ${scenario.hint}</p><p>Score: ${score}</p>`;
+            document.getElementById("game").querySelector("button[onclick='useHint()']").innerText = `Use Hint (-5 points, ${maxHints - hintsUsed} left)`;
+            if (hintsUsed >= maxHints) {
+                document.getElementById("game").querySelector("button[onclick='useHint()']").disabled = true;
+            }
+            playSound(clickSound);
+        }
+
         function selectOption(option) {
             clearInterval(timerInterval);
             let points = option.points;
             if (difficulty === 'medium') points *= 1.5;
             if (difficulty === 'hard') points *= 2;
-            score += points;
-            document.getElementById("feedback").innerHTML = `<p>${option.result}</p><p>Score: ${score}</p>`;
+            if (option.points > 0) {
+                streak++;
+                points *= (1 + streak * 0.1); // 10% bonus per streak
+            } else {
+                streak = 0;
+            }
+            score += Math.round(points);
+            document.getElementById("feedback").innerHTML = `<p>${option.result}</p><p>Score: ${score}</p><p>Streak: ${streak}</p>`;
             if (option.points < 0) {
                 document.getElementById("feedback").classList.add("wrong");
                 setTimeout(() => document.getElementById("feedback").classList.remove("wrong"), 300);
@@ -246,23 +394,29 @@
         function endGame() {
             clearInterval(timerInterval);
             document.getElementById("game").innerHTML = "<p>Game Over! Check your cybersecurity score below.</p>";
+            let message = score >= 80 ? "Cybersecurity Legend!" : score >= 40 ? "Great job! You’re cyber-savvy." : "Keep learning to stay safe!";
             document.getElementById("feedback").innerHTML = `
                 <p>Final Score: ${score}</p>
-                <p>${score >= 60 ? "Cybersecurity Master!" : score >= 30 ? "Great job! You’re cyber-savvy." : "Keep learning to stay safe!"}</p>
+                <p>${message}</p>
                 <p>Real-world fact: 80% of breaches involve weak passwords.</p>
-                <button onclick="restartGame()">Restart Game</button>
+                <button onclick="confirmRestart()">Restart Game</button>
             `;
             document.getElementById("passwordTester").style.display = "block";
             updateLeaderboard(score);
+            if (difficulty === 'hard' && score >= 40) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#00ccff', '#ff00ff'] });
+                document.body.style.background = "linear-gradient(135deg, #1a1a1a, #2c003e, #00ccff)";
+                setTimeout(() => {
+                    document.body.style.background = "linear-gradient(135deg, #1a1a1a, #2c003e)";
+                }, 2000);
+            }
             playSound(winSound);
         }
 
-        function restartGame() {
-            document.getElementById("game").style.display = "none";
-            document.getElementById("difficulty").style.display = "block";
-            document.getElementById("passwordTester").style.display = "none";
-            document.getElementById("feedback").innerHTML = "";
-            playSound(clickSound);
+        function confirmRestart() {
+            if (confirm("Restart game on " + difficulty + " difficulty?")) {
+                startGame(difficulty);
+            }
         }
 
         function testPassword() {
@@ -288,12 +442,12 @@
 
         function updateLeaderboard(score) {
             let scores = JSON.parse(localStorage.getItem("highScores")) || [];
-            scores.push({ score, date: new Date().toLocaleString() });
+            scores.push({ score, date: new Date().toLocaleString(), difficulty });
             scores.sort((a, b) => b.score - a.score);
             scores = scores.slice(0, 5);
             localStorage.setItem("highScores", JSON.stringify(scores));
             const highScoresList = document.getElementById("highScores");
-            highScoresList.innerHTML = scores.map(s => `<li>${s.score} - ${s.date}</li>`).join("");
+            highScoresList.innerHTML = scores.map(s => `<li>${s.score} - ${s.difficulty} - ${s.date}</li>`).join("");
         }
 
         function playSound(sound) {
