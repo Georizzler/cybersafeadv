@@ -203,7 +203,7 @@
         }
         @keyframes fadeOut {
             from { opacity: 1; }
-            to { opacity: 0; display: none; }
+            to { opacity: 0; }
         }
         @media (max-width: 600px) {
             .container {
@@ -234,7 +234,7 @@
     </style>
 </head>
 <body>
-    <div id="splash">
+    <div id="splash" style="display: flex;">
         <h1>CyberSafe</h1>
         <p>Let's Be Safe Together</p>
         <button onclick="startSplash()">Start</button>
@@ -275,6 +275,8 @@
     <script>
         let score = 0;
         let scenarioIndex = 0;
+        let quizIndex = 0;
+        let quizScore = 0;
         let difficulty = 'easy';
         let timeLeft = 30;
         let timerInterval;
@@ -283,19 +285,6 @@
         const maxHints = 1;
         const clickSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_5b8b3a6b9b.mp3');
         const winSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_3f3b3b3b3b.mp3');
-
-        function startSplash() {
-            const splash = document.getElementById("splash");
-            splash.classList.add("fade-out");
-            setTimeout(() => {
-                splash.style.display = "none";
-                document.querySelector(".container").style.display = "block";
-            }, 1000);
-            playSound(clickSound);
-        }
-
-        // Auto-transition after 5 seconds
-        setTimeout(startSplash, 5000);
 
         const scenarios = [
             {
@@ -307,7 +296,7 @@
                     { text: "Reply to verify", result: "Risky! Engaging with scams can expose you. (-5 points)", points: -5 }
                 ],
                 hint: "Check the sender’s email address before acting.",
-                image: "https://images.unsplash.com/photo-1563201516-6746e4220a07?auto=format&fit=crop&w=200"
+                image: "https://img.freepik.com/free-photo/email-marketing-concept_23-2149482997.jpg?w=200"
             },
             {
                 text: "You’re on public Wi-Fi. Do you log into your bank account?",
@@ -318,7 +307,7 @@
                     { text: "Check the Wi-Fi security", result: "Good effort, but not enough! Always use a VPN. (+5 points)", points: 5 }
                 ],
                 hint: "Public Wi-Fi is often unencrypted, making VPNs essential.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://static.vecteezy.com/system/resources/previews/000/349/617/small/laptop-coffee-shop.jpg?w=200"
             },
             {
                 text: "Your friend asks for your Netflix password. Do you share it?",
@@ -329,7 +318,7 @@
                     { text: "Change it afterward", result: "Not bad, but avoid sharing altogether. (+5 points)", points: 5 }
                 ],
                 hint: "Sharing passwords can lead to account compromise.",
-                image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=200"
+                image: "https://img.freepik.com/free-photo/smartphone-with-streaming-app_23-2149482998.jpg?w=200"
             },
             {
                 text: "A pop-up says your computer is infected and demands payment. What do you do?",
@@ -340,7 +329,7 @@
                     { text: "Restart your computer", result: "Decent, but always scan for threats. (+5 points)", points: 5 }
                 ],
                 hint: "Pop-ups demanding payment are often ransomware scams.",
-                image: "https://images.unsplash.com/photo-1556740714-7ad9da7a509d?auto=format&fit=crop&w=200"
+                image: "https://www.stockvault.net/photo/213456/computer-virus-warning?w=200"
             },
             {
                 text: "You need to update your software. Where do you download it from?",
@@ -351,7 +340,7 @@
                     { text: "Ask a friend for the file", result: "Risky! Files from others may be unsafe. (-5 points)", points: -5 }
                 ],
                 hint: "Only download software from official or verified sources.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://img.freepik.com/free-photo/software-update-concept_23-2149483000.jpg?w=200"
             },
             {
                 text: "You get a call claiming your account is compromised. They ask for your PIN. What do you do?",
@@ -362,7 +351,7 @@
                     { text: "Ask for their ID", result: "Not enough! Scammers can fake IDs. (-5 points)", points: -5 }
                 ],
                 hint: "Banks never ask for sensitive info over unsolicited calls.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://static.vecteezy.com/system/resources/previews/000/349/618/small/phone-scam-alert.jpg?w=200"
             },
             {
                 text: "A website asks for your email and password to continue. What do you do?",
@@ -373,7 +362,7 @@
                     { text: "Close the tab", result: "Safe choice! Avoid unknown sites. (+5 points)", points: 5 }
                 ],
                 hint: "Always verify the website’s URL and use unique passwords.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://img.freepik.com/free-photo/login-page-concept_23-2149482999.jpg?w=200"
             },
             {
                 text: "You find a USB drive in a parking lot. What do you do?",
@@ -384,7 +373,7 @@
                     { text: "Format it first", result: "Risky! Formatting may not remove all threats. (-5 points)", points: -5 }
                 ],
                 hint: "Unknown USB drives are a common malware delivery method.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://www.stockvault.net/photo/213457/usb-drive?w=200"
             },
             {
                 text: "A website prompts you to enable two-factor authentication (2FA). What do you do?",
@@ -395,7 +384,7 @@
                     { text: "Use a weaker password instead", result: "Bad choice! Weak passwords are risky. (-10 points)", points: -10 }
                 ],
                 hint: "Two-factor authentication adds an extra layer of security.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://img.freepik.com/free-photo/two-factor-authentication_23-2149483001.jpg?w=200"
             },
             {
                 text: "A social media post asks for personal details to enter a contest. What do you do?",
@@ -406,7 +395,7 @@
                     { text: "Comment to ask for details", result: "Risky! Engaging may expose you. (-5 points)", points: -5 }
                 ],
                 hint: "Never share personal details on social media for contests.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://static.vecteezy.com/system/resources/previews/000/349/619/small/social-media-post.jpg?w=200"
             },
             {
                 text: "You’re offered a free app download from an unknown source. What do you do?",
@@ -417,7 +406,7 @@
                     { text: "Ask for reviews first", result: "Decent, but always verify the source. (+5 points)", points: 5 }
                 ],
                 hint: "Only download apps from trusted app stores.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://img.freepik.com/free-photo/app-store-concept_23-2149483002.jpg?w=200"
             },
             {
                 text: "Your computer crashes. Do you have a backup of your data?",
@@ -428,52 +417,142 @@
                     { text: "I’ll recover it later", result: "Risky! Data recovery is not guaranteed. (-5 points)", points: -5 }
                 ],
                 hint: "Regular backups protect against data loss.",
-                image: "https://images.unsplash.com/photo-1516321310762-3b9f92b7f367?auto=format&fit=crop&w=200"
+                image: "https://www.stockvault.net/photo/213458/external-hard-drive?w=200"
             }
         ];
 
+        const quizQuestions = [
+            {
+                text: "Firewalls protect networks by blocking unauthorized access.",
+                answer: true,
+                feedback: "Correct! Firewalls act as a barrier against unauthorized network traffic."
+            },
+            {
+                text: "It’s safe to use the same password for multiple accounts.",
+                answer: false,
+                feedback: "Incorrect! Reusing passwords increases the risk of account compromise."
+            },
+            {
+                text: "HTTPS websites are always secure and trustworthy.",
+                answer: false,
+                feedback: "Incorrect! HTTPS ensures encryption, but scammers can still create HTTPS sites."
+            },
+            {
+                text: "Regular software updates help patch security vulnerabilities.",
+                answer: true,
+                feedback: "Correct! Updates fix vulnerabilities that hackers could exploit."
+            },
+            {
+                text: "Phishing attacks only occur via email.",
+                answer: false,
+                feedback: "Incorrect! Phishing can occur via text, social media, or fake websites."
+            },
+            {
+                text: "Antivirus software can protect against all types of malware.",
+                answer: false,
+                feedback: "Incorrect! No antivirus can catch 100% of malware, but they reduce risk significantly."
+            },
+            {
+                text: "Strong passwords should be at least 12 characters long.",
+                answer: true,
+                feedback: "Correct! Longer passwords with variety are harder to crack."
+            },
+            {
+                text: "Clicking 'Unsubscribe' in spam emails is always safe.",
+                answer: false,
+                feedback: "Incorrect! Unsubscribe links in spam can confirm your email is active or lead to scams."
+            },
+            {
+                text: "VPNs encrypt your internet traffic for privacy.",
+                answer: true,
+                feedback: "Correct! VPNs create secure tunnels for your data, enhancing privacy."
+            },
+            {
+                text: "Social engineering exploits human trust to gain access.",
+                answer: true,
+                feedback: "Correct! Scammers manipulate trust to trick users into revealing sensitive info."
+            }
+        ];
+
+        function startSplash() {
+            try {
+                const splash = document.getElementById("splash");
+                const container = document.querySelector(".container");
+                if (!splash || !container) {
+                    console.error("Splash or container element not found");
+                    return;
+                }
+                splash.classList.add("fade-out");
+                playSound(clickSound);
+                setTimeout(() => {
+                    splash.style.display = "none";
+                    container.style.display = "block";
+                }, 1000);
+            } catch (e) {
+                console.error("Error in startSplash:", e);
+            }
+        }
+
+        // Auto-transition after 5 seconds
+        setTimeout(() => {
+            if (document.getElementById("splash").style.display !== "none") {
+                startSplash();
+            }
+        }, 5000);
+
         function startGame(selectedDifficulty) {
-            difficulty = selectedDifficulty;
-            resetGameState();
-            document.getElementById("difficulty").style.display = "none";
-            document.getElementById("game").style.display = "block";
-            document.getElementById("feedback").innerHTML = "";
-            showScenario();
-            playSound(clickSound);
+            try {
+                difficulty = selectedDifficulty;
+                resetGameState();
+                document.getElementById("difficulty").style.display = "none";
+                document.getElementById("game").style.display = "block";
+                document.getElementById("feedback").innerHTML = "";
+                document.getElementById("passwordTester").style.display = "none";
+                showScenario();
+                playSound(clickSound);
+            } catch (e) {
+                console.error("Error in startGame:", e);
+            }
         }
 
         function resetGameState() {
             score = 0;
             scenarioIndex = 0;
+            quizIndex = 0;
+            quizScore = 0;
             streak = 0;
             hintsUsed = 0;
             clearInterval(timerInterval);
         }
 
         function showScenario() {
-            clearInterval(timerInterval);
-            timeLeft = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 20 : 30;
-            const scenario = scenarios[scenarioIndex];
-            const gameDiv = document.getElementById("game");
-            gameDiv.classList.add("fade-in");
-            setTimeout(() => gameDiv.classList.remove("fade-in"), 1000);
-            document.getElementById("scenarioText").innerText = scenario.text;
-            document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
-            document.getElementById("streak").innerText = `Streak: ${streak}`;
-            gameDiv.innerHTML = `<div class="progress-bar"><div class="progress" id="progress"></div></div>
-                                <img src="${scenario.image}" alt="Scenario Image" class="scenario-image">
-                                <p id="scenarioText">${scenario.text}</p>
-                                <p id="timer">Time left: ${timeLeft}s</p>
-                                <p id="streak">Streak: ${streak}</p>
-                                <button onclick="useHint()" ${hintsUsed >= maxHints ? 'disabled' : ''}>Use Hint (-5 points, ${maxHints - hintsUsed} left)</button>`;
-            scenario.options.forEach((option, index) => {
-                const btn = document.createElement("button");
-                btn.innerText = option.text;
-                btn.onclick = () => selectOption(option);
-                gameDiv.appendChild(btn);
-            });
-            updateProgress();
-            startTimer();
+            try {
+                clearInterval(timerInterval);
+                timeLeft = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 20 : 30;
+                const scenario = scenarios[scenarioIndex];
+                const gameDiv = document.getElementById("game");
+                gameDiv.classList.add("fade-in");
+                setTimeout(() => gameDiv.classList.remove("fade-in"), 1000);
+                document.getElementById("scenarioText").innerText = scenario.text;
+                document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
+                document.getElementById("streak").innerText = `Streak: ${streak}`;
+                gameDiv.innerHTML = `<div class="progress-bar"><div class="progress" id="progress"></div></div>
+                                    <img src="${scenario.image}" alt="Scenario Image" class="scenario-image">
+                                    <p id="scenarioText">${scenario.text}</p>
+                                    <p id="timer">Time left: ${timeLeft}s</p>
+                                    <p id="streak">Streak: ${streak}</p>
+                                    <button onclick="useHint()" ${hintsUsed >= maxHints ? 'disabled' : ''}>Use Hint (-5 points, ${maxHints - hintsUsed} left)</button>`;
+                scenario.options.forEach((option, index) => {
+                    const btn = document.createElement("button");
+                    btn.innerText = option.text;
+                    btn.onclick = () => selectOption(option);
+                    gameDiv.appendChild(btn);
+                });
+                updateProgress();
+                startTimer();
+            } catch (e) {
+                console.error("Error in showScenario:", e);
+            }
         }
 
         function startTimer() {
@@ -534,24 +613,75 @@
                 if (scenarioIndex < scenarios.length) {
                     showScenario();
                 } else {
-                    endGame();
+                    startQuiz();
                 }
             }, 2000);
         }
 
-        function endGame() {
-            clearInterval(timerInterval);
-            document.getElementById("game").innerHTML = "<p>Game Over! Check your cybersecurity score below.</p>";
-            let message = score >= 120 ? "Cybersecurity Legend!" : score >= 60 ? "Great job! You’re cyber-savvy." : "Keep learning to stay safe!";
+        function startQuiz() {
+            quizIndex = 0;
+            quizScore = 0;
+            const gameDiv = document.getElementById("game");
+            gameDiv.innerHTML = "<h2>Quick Quiz: Test Your Knowledge!</h2>";
+            document.getElementById("feedback").innerHTML = "<p>Answer these true/false questions to boost your score!</p>";
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const question = quizQuestions[quizIndex];
+            const gameDiv = document.getElementById("game");
+            gameDiv.innerHTML = `<h2>Quick Quiz: Test Your Knowledge!</h2>
+                                <p>${question.text}</p>`;
+            const trueBtn = document.createElement("button");
+            trueBtn.innerText = "True";
+            trueBtn.onclick = () => selectQuizAnswer(true);
+            const falseBtn = document.createElement("button");
+            falseBtn.innerText = "False";
+            falseBtn.onclick = () => selectQuizAnswer(false);
+            gameDiv.appendChild(trueBtn);
+            gameDiv.appendChild(falseBtn);
+            gameDiv.classList.add("fade-in");
+            setTimeout(() => gameDiv.classList.remove("fade-in"), 1000);
+        }
+
+        function selectQuizAnswer(userAnswer) {
+            const question = quizQuestions[quizIndex];
+            const isCorrect = userAnswer === question.answer;
+            if (isCorrect) {
+                quizScore += 5;
+            }
+            document.getElementById("feedback").innerHTML = `<p>${question.feedback}</p><p>Quiz Score: ${quizScore}</p>`;
+            if (!isCorrect) {
+                document.getElementById("feedback").classList.add("wrong");
+                setTimeout(() => document.getElementById("feedback").classList.remove("wrong"), 300);
+            }
+            playSound(clickSound);
+            quizIndex++;
+            setTimeout(() => {
+                if (quizIndex < quizQuestions.length) {
+                    showQuizQuestion();
+                } else {
+                    endQuiz();
+                }
+            }, 2000);
+        }
+
+        function endQuiz() {
+            score += quizScore;
+            const gameDiv = document.getElementById("game");
+            gameDiv.innerHTML = "<p>Quiz Complete! Check your final score below.</p>";
+            let message = score >= 170 ? "Cybersecurity Legend!" : score >= 110 ? "Great job! You’re cyber-savvy." : "Keep learning to stay safe!";
             document.getElementById("feedback").innerHTML = `
-                <p>Final Score: ${score}</p>
+                <p>Main Game Score: ${score - quizScore}</p>
+                <p>Quiz Score: ${quizScore}</p>
+                <p>Total Score: ${score}</p>
                 <p>${message}</p>
                 <p>Real-world fact: 80% of breaches involve weak passwords.</p>
                 <button onclick="confirmRestart()">Restart Game</button>
             `;
             document.getElementById("passwordTester").style.display = "block";
             updateLeaderboard(score);
-            if (difficulty === 'hard' && score >= 60) {
+            if (difficulty === 'hard' && score >= 110) {
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#7c3aed'] });
                 document.body.style.background = "linear-gradient(135deg, #0a0a1a, #1e1a3c, #3b82f6)";
                 setTimeout(() => {
@@ -562,8 +692,23 @@
         }
 
         function confirmRestart() {
-            if (confirm("Restart game on " + difficulty + " difficulty?")) {
-                startGame(difficulty);
+            if (confirm("Restart game? You’ll return to the difficulty selection.")) {
+                resetGameState();
+                document.getElementById("game").style.display = "none";
+                document.getElementById("difficulty").style.display = "block";
+                document.getElementById("passwordTester").style.display = "none";
+                document.getElementById("feedback").innerHTML = "";
+                const splash = document.getElementById("splash");
+                splash.style.display = "flex";
+                splash.classList.remove("fade-out");
+                document.querySelector(".container").style.display = "none";
+                // Reset auto-transition timer
+                setTimeout(() => {
+                    if (splash.style.display !== "none") {
+                        startSplash();
+                    }
+                }, 5000);
+                playSound(clickSound);
             }
         }
 
@@ -588,9 +733,9 @@
             playSound(clickSound);
         }
 
-        function updateLeaderboard(score) {
+        function updateLeaderboard(totalScore) {
             let scores = JSON.parse(localStorage.getItem("highScores")) || [];
-            scores.push({ score, date: new Date().toLocaleString(), difficulty });
+            scores.push({ score: totalScore, date: new Date().toLocaleString(), difficulty });
             scores.sort((a, b) => b.score - a.score);
             scores = scores.slice(0, 5);
             localStorage.setItem("highScores", JSON.stringify(scores));
