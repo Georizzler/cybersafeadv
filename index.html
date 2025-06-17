@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberSafe Adventures</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0a0a1a, #1e1a3c);
+            background: linear-gradient(135deg, #0a0a2a, #2a004a);
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -18,48 +18,84 @@
             margin: 0;
             text-align: center;
             overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 246, 255, 0.1));
+            animation: matrixRain 10s linear infinite;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        @keyframes matrixRain {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
         }
         .container {
-            background: linear-gradient(135deg, #1f1f2f, #0f172a);
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 700px;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 750px;
             width: 95%;
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
-            margin: 20px;
+            box-shadow: 0 10px 40px rgba(0, 246, 255, 0.4), 0 0 20px rgba(124, 58, 237, 0.3);
+            margin: 25px;
+            backdrop-filter: blur(5px);
         }
         h1 {
-            color: #3b82f6;
+            font-family: 'Orbitron', sans-serif;
+            color: #00f6ff;
             font-weight: 700;
-            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 246, 255, 0.7);
+            margin-bottom: 25px;
+            font-size: 2.5em;
         }
         h2 {
-            color: #7c3aed;
+            font-family: 'Orbitron', sans-serif;
+            color: #ff00ff;
             font-weight: 600;
-            font-size: 1.5em;
+            font-size: 1.8em;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
         }
         button {
-            background: linear-gradient(45deg, #3b82f6, #7c3aed);
+            background: linear-gradient(45deg, #00f6ff, #ff00ff);
             border: none;
-            padding: 12px 24px;
-            margin: 8px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1.2em;
             font-weight: 600;
-            color: #ffffff;
-            transition: transform 0.2s, box-shadow 0.2s;
+            color: #0a0a2a;
+            box-shadow: 0 0 15px rgba(0, 246, 255, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         button:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(0, 246, 255, 0.8), 0 0 15px rgba(255, 0, 255, 0.6);
         }
         button:active {
             transform: scale(0.95);
         }
+        button:disabled {
+            background: linear-gradient(45deg, #444, #666);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .back-button {
+            background: linear-gradient(45deg, #00f6ff, #00ffaa);
+        }
+        .restart-button {
+            background: linear-gradient(45deg, #ff00ff, #ff0040);
+        }
         .wrong {
             animation: shake 0.3s;
+            border: 2px solid #ff0040;
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.5);
         }
         @keyframes shake {
             0% { transform: translateX(0); }
@@ -69,87 +105,120 @@
             100% { transform: translateX(0); }
         }
         #passwordTester, #feedback, #leaderboard {
-            margin-top: 25px;
+            margin-top: 30px;
         }
         input {
-            padding: 12px;
-            margin: 12px 0;
-            border-radius: 8px;
-            border: none;
-            width: 85%;
-            background-color: #2a2a3a;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: 1px solid #00f6ff;
+            width: 90%;
+            background-color: rgba(10, 10, 42, 0.7);
             color: #ffffff;
-            font-size: 1em;
-            transition: box-shadow 0.2s;
+            font-size: 1.1em;
+            font-family: 'Orbitron', sans-serif;
+            transition: box-shadow 0.3s;
         }
         input:focus {
             outline: none;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 15px rgba(0, 246, 255, 0.7);
         }
         input::placeholder {
             color: #aaaaaa;
         }
         .progress-bar {
             width: 100%;
-            background-color: #444;
-            border-radius: 10px;
+            background-color: #2a2a4a;
+            border-radius: 12px;
             overflow: hidden;
-            margin: 15px 0;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 246, 255, 0.3);
+            animation: pulseProgress 2s infinite;
         }
         .progress {
-            height: 20px;
-            background: linear-gradient(90deg, #3b82f6, #7c3aed);
+            height: 25px;
+            background: linear-gradient(90deg, #00f6ff, #ff00ff);
             width: 0%;
             transition: width 0.5s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 246, 255, 0.5);
+        }
+        @keyframes pulseProgress {
+            0% { box-shadow: 0 0 15px rgba(0, 246, 255, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 246, 255, 0.5); }
+            100% { box-shadow: 0 0 15px rgba(0, 246, 255, 0.3); }
         }
         .fade-in {
             animation: fadeIn 1s ease-in-out;
         }
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
         #timer.low-time {
-            color: #ef4444;
+            color: #ff0040;
             animation: pulse 1s infinite;
+            text-shadow: 0 0 10px rgba(255, 0, 64, 0.7);
         }
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
         #feedback {
-            background-color: rgba(59, 130, 246, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            background-color: rgba(0, 246, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #00f6ff;
+            box-shadow: 0 0 15px rgba(0, 246, 255, 0.3);
+            transition: box-shadow 0.3s;
+        }
+        #feedback.wrong {
+            border-color: #ff0040;
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.5);
         }
         #leaderboard ul {
             list-style: none;
             padding: 0;
         }
         #leaderboard li {
-            background-color: rgba(255, 255, 255, 0.05);
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
+            background: linear-gradient(45deg, rgba(0, 246, 255, 0.1), rgba(255, 0, 255, 0.1));
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 246, 255, 0.3);
+            font-size: 1em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #leaderboard li:nth-child(odd) {
+            background: linear-gradient(45deg, rgba(255, 0, 255, 0.1), rgba(0, 246, 255, 0.1));
         }
         .sound-toggle {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         .sound-toggle label {
-            font-size: 0.9em;
-            color: #cccccc;
-            background-color: rgba(59, 130, 246, 0.1);
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: background-color 0.2s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1em;
+            color: #00f6ff;
+            background-color: rgba(0, 246, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid #00f6ff;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
         .sound-toggle label:hover {
-            background-color: rgba(59, 130, 246, 0.2);
+            background-color: rgba(0, 246, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 246, 255, 0.5);
         }
         #splash {
             position: fixed;
@@ -157,67 +226,116 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(10, 10, 50, 0.3), rgba(50, 10, 80, 0.3));
+            background: linear-gradient(135deg, rgba(10, 10, 50, 0.5), rgba(50, 10, 80, 0.5));
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            animation: pulseGlow 3s infinite;
+            animation: pulseGlow 2.5s infinite;
             z-index: 1000;
+            border: 5px solid #00f6ff;
+            box-shadow: 0 0 30px rgba(0, 246, 255, 0.7);
         }
         #splash h1 {
-            font-size: 3em;
-            color: #3b82f6;
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
-            animation: fadeInText 1.5s ease-in-out;
+            font-size: 4em;
+            color: #00f6ff;
+            text-shadow: 0 0 25px rgba(0, 246, 255, 0.9);
+            animation: scaleText 2s infinite;
         }
         #splash p {
-            font-size: 1.5em;
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
-            margin: 10px 0;
+            font-size: 1.8em;
+            color: #ff00ff;
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.7);
+            margin: 15px 0;
             animation: fadeInText 2s ease-in-out;
         }
+        #splash input {
+            margin: 20px 0;
+            width: 80%;
+            max-width: 300px;
+        }
         #splash button {
-            margin-top: 20px;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
         }
         .fade-out {
             animation: fadeOut 1s forwards;
         }
+        @keyframes scaleText {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
         @keyframes fadeInText {
-            from { opacity: 0; transform: scale(0.8); }
+            from { opacity: 0; transform: scale(0.7); }
             to { opacity: 1; transform: scale(1); }
         }
         @keyframes pulseGlow {
-            0% { background-color: rgba(10, 10, 50, 0.3); }
-            50% { background-color: rgba(10, 10, 50, 0.4); }
-            100% { background-color: rgba(10, 10, 50, 0.3); }
+            0% { box-shadow: 0 0 30px rgba(0, 246, 255, 0.7); }
+            50% { box-shadow: 0 0 50px rgba(0, 246, 255, 0.9); }
+            100% { box-shadow: 0 0 30px rgba(0, 246, 255, 0.7); }
         }
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
         }
+        #game button:nth-child(3) { /* True button */
+            background: linear-gradient(45deg, #00f6ff, #00ffaa);
+        }
+        #game button:nth-child(4) { /* False button */
+            background: linear-gradient(45deg, #ff00ff, #ff0040);
+        }
+        .bottom-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-bottom: 20px;
+        }
+        .credits {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f6ff;
+            text-shadow: 0 0 10px rgba(0, 246, 255, 0.7);
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .credits span {
+            color: #ff00ff;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+        }
         @media (max-width: 600px) {
             .container {
-                padding: 20px;
+                padding: 25px;
                 width: 90%;
             }
             h1 {
-                font-size: 1.8em;
+                font-size: 2em;
             }
             #splash h1 {
-                font-size: 2.2em;
+                font-size: 2.8em;
             }
             #splash p {
-                font-size: 1.2em;
+                font-size: 1.4em;
+            }
+            #splash input {
+                width: 90%;
             }
             button {
-                padding: 10px 18px;
+                padding: 12px 20px;
                 font-size: 1em;
             }
             input {
-                width: 90%;
+                width: 95%;
+                font-size: 1em;
+            }
+            #leaderboard li {
                 font-size: 0.9em;
+            }
+            .bottom-buttons button {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+            .credits {
+                font-size: 1em;
             }
         }
     </style>
@@ -226,7 +344,8 @@
     <div id="splash" style="display: flex;">
         <h1>CyberSafe</h1>
         <p>Let's Be Safe Together</p>
-        <button onclick="startSplash()">Start</button>
+        <input id="playerName" placeholder="Enter your name" oninput="validateName()">
+        <button id="startButton" onclick="startSplash()" disabled>Start</button>
     </div>
     <div class="container" style="display: none;">
         <h1>CyberSafe Adventures</h1>
@@ -271,9 +390,14 @@
         let timerInterval;
         let streak = 0;
         let hintsUsed = 0;
+        let playerName = '';
+        let stateHistory = [];
+        let isQuizMode = false;
+        let passwordAttempts = 0;
         const maxHints = 1;
-        const clickSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_5b8b3a6b9b.mp3');
-        const winSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_3f3b3b3b3b.mp3');
+        const maxPasswordAttempts = 4;
+        const clickSound = new Audio('https://cdn.pixabay.com/audio/2023/02/07/audio_2954e3b7a5.mp3');
+        const winSound = new Audio('https://cdn.pixabay.com/audio/2023/07/27/audio_1b2a74f05b.mp3');
 
         const scenarios = [
             {
@@ -382,7 +506,7 @@
                     { text: "Download it", result: "Risky! Unknown apps may contain malware. (-10 points)", points: -10 },
                     { text: "Check the app store", result: "Smart! Use official app stores. (+10 points)", points: 10 },
                     { text: "Decline the offer", result: "Good call! Avoid unknown sources. (+5 points)", points: 5 },
-                    { text: "Ask for reviews first", result: "Decent, but always verify the source. (+5 points)", points: 5 }
+                    { text: "Ask for reviews first", result: "Discuss with others first, but always verify the source. (+15 points)", points: 15 }
                 ],
                 hint: "Only download apps from trusted app stores."
             },
@@ -451,8 +575,27 @@
             }
         ];
 
+        // Initialize leaderboard on page load
+        displayLeaderboard();
+
+        function validateName() {
+            const nameInput = document.getElementById("playerName").value.trim();
+            const startButton = document.getElementById("startButton");
+            if (nameInput.length >= 2) {
+                startButton.disabled = false;
+            } else {
+                startButton.disabled = true;
+            }
+        }
+
         function startSplash() {
             try {
+                const nameInput = document.getElementById("playerName").value.trim();
+                if (nameInput.length < 2) {
+                    alert("Please enter a name with at least 2 characters.");
+                    return;
+                }
+                playerName = nameInput.substring(0, 20);
                 const splash = document.getElementById("splash");
                 const container = document.querySelector(".container");
                 if (!splash || !container) {
@@ -469,12 +612,6 @@
                 console.error("Error in startSplash:", e);
             }
         }
-
-        setTimeout(() => {
-            if (document.getElementById("splash").style.display !== "none") {
-                startSplash();
-            }
-        }, 5000);
 
         function startGame(selectedDifficulty) {
             try {
@@ -498,6 +635,9 @@
             quizScore = 0;
             streak = 0;
             hintsUsed = 0;
+            passwordAttempts = 0;
+            stateHistory = [];
+            isQuizMode = false;
             clearInterval(timerInterval);
         }
 
@@ -507,11 +647,8 @@
                 timeLeft = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 20 : 30;
                 const scenario = scenarios[scenarioIndex];
                 const gameDiv = document.getElementById("game");
-                gameDiv.classList.add("fade-in");
-                setTimeout(() => gameDiv.classList.remove("fade-in"), 1000);
-                document.getElementById("scenarioText").innerText = scenario.text;
-                document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
-                document.getElementById("streak").innerText = `Streak: ${streak}`;
+                gameDiv.classList.add("slide-in");
+                setTimeout(() => gameDiv.classList.remove("slide-in"), 500);
                 gameDiv.innerHTML = `<div class="progress-bar"><div class="progress" id="progress"></div></div>
                                     <p id="scenarioText">${scenario.text}</p>
                                     <p id="timer">Time left: ${timeLeft}s</p>
@@ -523,6 +660,20 @@
                     btn.onclick = () => selectOption(option);
                     gameDiv.appendChild(btn);
                 });
+                const bottomButtonsDiv = document.createElement("div");
+                bottomButtonsDiv.className = "bottom-buttons";
+                const backButton = document.createElement("button");
+                backButton.className = "back-button";
+                backButton.innerText = "Back";
+                backButton.onclick = goBack;
+                backButton.disabled = stateHistory.length === 0;
+                const restartButton = document.createElement("button");
+                restartButton.className = "restart-button";
+                restartButton.innerText = "Restart";
+                restartButton.onclick = confirmRestart;
+                bottomButtonsDiv.appendChild(backButton);
+                bottomButtonsDiv.appendChild(restartButton);
+                gameDiv.appendChild(bottomButtonsDiv);
                 updateProgress();
                 startTimer();
             } catch (e) {
@@ -567,6 +718,7 @@
 
         function selectOption(option) {
             clearInterval(timerInterval);
+            stateHistory.push({ score, streak, scenarioIndex, quizIndex, quizScore, timeLeft, isQuizMode });
             let points = option.points;
             if (difficulty === 'medium') points *= 1.5;
             if (difficulty === 'hard') points *= 2;
@@ -594,8 +746,10 @@
         }
 
         function startQuiz() {
+            isQuizMode = true;
             quizIndex = 0;
             quizScore = 0;
+            stateHistory.push({ score, streak, scenarioIndex, quizIndex, quizScore, timeLeft, isQuizMode });
             const gameDiv = document.getElementById("game");
             gameDiv.innerHTML = "<h2>Quick Quiz: Test Your Knowledge!</h2>";
             document.getElementById("feedback").innerHTML = "<p>Answer these true/false questions to boost your score!</p>";
@@ -610,16 +764,31 @@
             const trueBtn = document.createElement("button");
             trueBtn.innerText = "True";
             trueBtn.onclick = () => selectQuizAnswer(true);
+            gameDiv.appendChild(trueBtn);
             const falseBtn = document.createElement("button");
             falseBtn.innerText = "False";
             falseBtn.onclick = () => selectQuizAnswer(false);
-            gameDiv.appendChild(trueBtn);
             gameDiv.appendChild(falseBtn);
-            gameDiv.classList.add("fade-in");
-            setTimeout(() => gameDiv.classList.remove("fade-in"), 1000);
+            const bottomButtonsDiv = document.createElement("div");
+            bottomButtonsDiv.className = "bottom-buttons";
+            const backButton = document.createElement("button");
+            backButton.className = "back-button";
+            backButton.innerText = "Back";
+            backButton.onclick = goBack;
+            backButton.disabled = stateHistory.length === 0;
+            const restartButton = document.createElement("button");
+            restartButton.className = "restart-button";
+            restartButton.innerText = "Restart";
+            restartButton.onclick = confirmRestart;
+            bottomButtonsDiv.appendChild(backButton);
+            bottomButtonsDiv.appendChild(restartButton);
+            gameDiv.appendChild(bottomButtonsDiv);
+            gameDiv.classList.add("slide-in");
+            setTimeout(() => gameDiv.classList.remove("slide-in"), 500);
         }
 
         function selectQuizAnswer(userAnswer) {
+            stateHistory.push({ score, streak, scenarioIndex, quizIndex, quizScore, timeLeft, isQuizMode });
             const question = quizQuestions[quizIndex];
             const isCorrect = userAnswer === question.answer;
             if (isCorrect) {
@@ -641,6 +810,26 @@
             }, 2000);
         }
 
+        function goBack() {
+            if (stateHistory.length === 0) return;
+            clearInterval(timerInterval);
+            const previousState = stateHistory.pop();
+            score = previousState.score;
+            streak = previousState.streak;
+            scenarioIndex = previousState.scenarioIndex;
+            quizIndex = previousState.quizIndex;
+            quizScore = previousState.quizScore;
+            timeLeft = previousState.timeLeft;
+            isQuizMode = previousState.isQuizMode;
+            document.getElementById("feedback").innerHTML = "";
+            playSound(clickSound);
+            if (isQuizMode) {
+                showQuizQuestion();
+            } else {
+                showScenario();
+            }
+        }
+
         function endQuiz() {
             score += quizScore;
             const gameDiv = document.getElementById("game");
@@ -657,18 +846,19 @@
             document.getElementById("passwordTester").style.display = "block";
             updateLeaderboard(score);
             if (difficulty === 'hard' && score >= 110) {
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#7c3aed'] });
-                document.body.style.background = "linear-gradient(135deg, #0a0a1a, #1e1a3c, #3b82f6)";
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#00f6ff', '#ff00ff'] });
+                document.body.style.background = "linear-gradient(135deg, #0a0a2a, #2a004a, #00f6ff)";
                 setTimeout(() => {
-                    document.body.style.background = "linear-gradient(135deg, #0a0a1a, #1e1a3c)";
+                    document.body.style.background = "linear-gradient(135deg, #0a0a2a, #2a004a)";
                 }, 2000);
             }
             playSound(winSound);
         }
 
         function confirmRestart() {
-            if (confirm("Restart game? You’ll return to the difficulty selection.")) {
+            if (confirm("Restart game? You’ll lose progress and return to the splash screen.")) {
                 resetGameState();
+                playerName = '';
                 document.getElementById("game").style.display = "none";
                 document.getElementById("difficulty").style.display = "block";
                 document.getElementById("passwordTester").style.display = "none";
@@ -677,16 +867,15 @@
                 splash.style.display = "flex";
                 splash.classList.remove("fade-out");
                 document.querySelector(".container").style.display = "none";
-                setTimeout(() => {
-                    if (splash.style.display !== "none") {
-                        startSplash();
-                    }
-                }, 5000);
+                document.getElementById("playerName").value = "";
+                document.getElementById("startButton").disabled = true;
                 playSound(clickSound);
             }
         }
 
         function testPassword() {
+            if (passwordAttempts >= maxPasswordAttempts) return;
+            passwordAttempts++;
             const password = document.getElementById("passwordInput").value;
             let strength = "Weak";
             let feedback = [];
@@ -703,18 +892,32 @@
             } else if (password.length > 8) {
                 strength = "Medium";
             }
-            document.getElementById("passwordResult").innerHTML = `Password Strength: ${strength}<br>${feedback.join("<br>")}`;
+            document.getElementById("passwordResult").innerHTML = `Password Strength: ${strength}<br>${feedback.join("<br>")}<br>Attempts left: ${maxPasswordAttempts - passwordAttempts}`;
             playSound(clickSound);
+            if (passwordAttempts >= maxPasswordAttempts) {
+                const passwordTester = document.getElementById("passwordTester");
+                passwordTester.innerHTML = `
+                    <p class="credits">THANK YOU AND STAY SAFE</p>
+                    <p class="credits">BY <span>GEORGE NDUNGU</span> AND <span>RYAN MAINA</span></p>
+                    <p class="credits">© 2025</p>
+                    <button class="restart-button" onclick="confirmRestart()">Restart</button>
+                `;
+            }
         }
 
         function updateLeaderboard(totalScore) {
             let scores = JSON.parse(localStorage.getItem("highScores")) || [];
-            scores.push({ score: totalScore, date: new Date().toLocaleString(), difficulty });
+            scores.push({ name: playerName, score: totalScore, difficulty, date: new Date().toLocaleString() });
             scores.sort((a, b) => b.score - a.score);
             scores = scores.slice(0, 5);
             localStorage.setItem("highScores", JSON.stringify(scores));
+            displayLeaderboard();
+        }
+
+        function displayLeaderboard() {
+            const scores = JSON.parse(localStorage.getItem("highScores")) || [];
             const highScoresList = document.getElementById("highScores");
-            highScoresList.innerHTML = scores.map(s => `<li>${s.score} - ${s.difficulty} - ${s.date}</li>`).join("");
+            highScoresList.innerHTML = scores.map(s => `<li>${s.name}: ${s.score} - ${s.difficulty} - ${s.date}</li>`).join("");
         }
 
         function playSound(sound) {
