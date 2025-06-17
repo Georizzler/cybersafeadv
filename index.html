@@ -151,14 +151,6 @@
         .sound-toggle label:hover {
             background-color: rgba(59, 130, 246, 0.2);
         }
-        .scenario-image {
-            width: 200px;
-            height: auto;
-            border-radius: 8px;
-            margin: 10px auto;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-        }
         #splash {
             position: fixed;
             top: 0;
@@ -227,9 +219,6 @@
                 width: 90%;
                 font-size: 0.9em;
             }
-            .scenario-image {
-                width: 150px;
-            }
         }
     </style>
 </head>
@@ -295,8 +284,7 @@
                     { text: "Report it", result: "Best move! Reporting helps stop scams. (+10 points)", points: 10 },
                     { text: "Reply to verify", result: "Risky! Engaging with scams can expose you. (-5 points)", points: -5 }
                 ],
-                hint: "Check the sender’s email address before acting.",
-                image: "https://img.freepik.com/free-photo/email-marketing-concept_23-2149482997.jpg?w=200"
+                hint: "Check the sender’s email address before acting."
             },
             {
                 text: "You’re on public Wi-Fi. Do you log into your bank account?",
@@ -306,8 +294,7 @@
                     { text: "Use a VPN first", result: "Excellent! A VPN encrypts your connection. (+15 points)", points: 15 },
                     { text: "Check the Wi-Fi security", result: "Good effort, but not enough! Always use a VPN. (+5 points)", points: 5 }
                 ],
-                hint: "Public Wi-Fi is often unencrypted, making VPNs essential.",
-                image: "https://static.vecteezy.com/system/resources/previews/000/349/617/small/laptop-coffee-shop.jpg?w=200"
+                hint: "Public Wi-Fi is often unencrypted, making VPNs essential."
             },
             {
                 text: "Your friend asks for your Netflix password. Do you share it?",
@@ -317,8 +304,7 @@
                     { text: "Suggest they get their own", result: "Perfect! Encouraging security is key. (+15 points)", points: 15 },
                     { text: "Change it afterward", result: "Not bad, but avoid sharing altogether. (+5 points)", points: 5 }
                 ],
-                hint: "Sharing passwords can lead to account compromise.",
-                image: "https://img.freepik.com/free-photo/smartphone-with-streaming-app_23-2149482998.jpg?w=200"
+                hint: "Sharing passwords can lead to account compromise."
             },
             {
                 text: "A pop-up says your computer is infected and demands payment. What do you do?",
@@ -328,8 +314,7 @@
                     { text: "Run an antivirus scan", result: "Smart! Verify with trusted software. (+10 points)", points: 10 },
                     { text: "Restart your computer", result: "Decent, but always scan for threats. (+5 points)", points: 5 }
                 ],
-                hint: "Pop-ups demanding payment are often ransomware scams.",
-                image: "https://www.stockvault.net/photo/213456/computer-virus-warning?w=200"
+                hint: "Pop-ups demanding payment are often ransomware scams."
             },
             {
                 text: "You need to update your software. Where do you download it from?",
@@ -339,8 +324,7 @@
                     { text: "Check for auto-updates", result: "Best choice! Auto-updates are safest. (+15 points)", points: 15 },
                     { text: "Ask a friend for the file", result: "Risky! Files from others may be unsafe. (-5 points)", points: -5 }
                 ],
-                hint: "Only download software from official or verified sources.",
-                image: "https://img.freepik.com/free-photo/software-update-concept_23-2149483000.jpg?w=200"
+                hint: "Only download software from official or verified sources."
             },
             {
                 text: "You get a call claiming your account is compromised. They ask for your PIN. What do you do?",
@@ -350,8 +334,7 @@
                     { text: "Verify with your bank", result: "Perfect! Always confirm directly. (+15 points)", points: 15 },
                     { text: "Ask for their ID", result: "Not enough! Scammers can fake IDs. (-5 points)", points: -5 }
                 ],
-                hint: "Banks never ask for sensitive info over unsolicited calls.",
-                image: "https://static.vecteezy.com/system/resources/previews/000/349/618/small/phone-scam-alert.jpg?w=200"
+                hint: "Banks never ask for sensitive info over unsolicited calls."
             },
             {
                 text: "A website asks for your email and password to continue. What do you do?",
@@ -361,8 +344,7 @@
                     { text: "Use a password manager", result: "Great! Unique passwords are safer. (+15 points)", points: 15 },
                     { text: "Close the tab", result: "Safe choice! Avoid unknown sites. (+5 points)", points: 5 }
                 ],
-                hint: "Always verify the website’s URL and use unique passwords.",
-                image: "https://img.freepik.com/free-photo/login-page-concept_23-2149482999.jpg?w=200"
+                hint: "Always verify the website’s URL and use unique passwords."
             },
             {
                 text: "You find a USB drive in a parking lot. What do you do?",
@@ -372,8 +354,7 @@
                     { text: "Report it to IT", result: "Best move! Let professionals handle it. (+15 points)", points: 15 },
                     { text: "Format it first", result: "Risky! Formatting may not remove all threats. (-5 points)", points: -5 }
                 ],
-                hint: "Unknown USB drives are a common malware delivery method.",
-                image: "https://www.stockvault.net/photo/213457/usb-drive?w=200"
+                hint: "Unknown USB drives are a common malware delivery method."
             },
             {
                 text: "A website prompts you to enable two-factor authentication (2FA). What do you do?",
@@ -383,8 +364,7 @@
                     { text: "Research 2FA first", result: "Good move! Understanding it is smart. (+10 points)", points: 10 },
                     { text: "Use a weaker password instead", result: "Bad choice! Weak passwords are risky. (-10 points)", points: -10 }
                 ],
-                hint: "Two-factor authentication adds an extra layer of security.",
-                image: "https://img.freepik.com/free-photo/two-factor-authentication_23-2149483001.jpg?w=200"
+                hint: "Two-factor authentication adds an extra layer of security."
             },
             {
                 text: "A social media post asks for personal details to enter a contest. What do you do?",
@@ -394,8 +374,7 @@
                     { text: "Report the post", result: "Best move! Reporting protects others. (+15 points)", points: 15 },
                     { text: "Comment to ask for details", result: "Risky! Engaging may expose you. (-5 points)", points: -5 }
                 ],
-                hint: "Never share personal details on social media for contests.",
-                image: "https://static.vecteezy.com/system/resources/previews/000/349/619/small/social-media-post.jpg?w=200"
+                hint: "Never share personal details on social media for contests."
             },
             {
                 text: "You’re offered a free app download from an unknown source. What do you do?",
@@ -405,8 +384,7 @@
                     { text: "Decline the offer", result: "Good call! Avoid unknown sources. (+5 points)", points: 5 },
                     { text: "Ask for reviews first", result: "Decent, but always verify the source. (+5 points)", points: 5 }
                 ],
-                hint: "Only download apps from trusted app stores.",
-                image: "https://img.freepik.com/free-photo/app-store-concept_23-2149483002.jpg?w=200"
+                hint: "Only download apps from trusted app stores."
             },
             {
                 text: "Your computer crashes. Do you have a backup of your data?",
@@ -416,8 +394,7 @@
                     { text: "Yes, in the cloud", result: "Excellent! Cloud backups are secure. (+15 points)", points: 15 },
                     { text: "I’ll recover it later", result: "Risky! Data recovery is not guaranteed. (-5 points)", points: -5 }
                 ],
-                hint: "Regular backups protect against data loss.",
-                image: "https://www.stockvault.net/photo/213458/external-hard-drive?w=200"
+                hint: "Regular backups protect against data loss."
             }
         ];
 
@@ -493,7 +470,6 @@
             }
         }
 
-        // Auto-transition after 5 seconds
         setTimeout(() => {
             if (document.getElementById("splash").style.display !== "none") {
                 startSplash();
@@ -537,7 +513,6 @@
                 document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
                 document.getElementById("streak").innerText = `Streak: ${streak}`;
                 gameDiv.innerHTML = `<div class="progress-bar"><div class="progress" id="progress"></div></div>
-                                    <img src="${scenario.image}" alt="Scenario Image" class="scenario-image">
                                     <p id="scenarioText">${scenario.text}</p>
                                     <p id="timer">Time left: ${timeLeft}s</p>
                                     <p id="streak">Streak: ${streak}</p>
@@ -597,7 +572,7 @@
             if (difficulty === 'hard') points *= 2;
             if (option.points > 0) {
                 streak++;
-                points *= (1 + streak * 0.1); // 10% bonus per streak
+                points *= (1 + streak * 0.1);
             } else {
                 streak = 0;
             }
@@ -702,7 +677,6 @@
                 splash.style.display = "flex";
                 splash.classList.remove("fade-out");
                 document.querySelector(".container").style.display = "none";
-                // Reset auto-transition timer
                 setTimeout(() => {
                     if (splash.style.display !== "none") {
                         startSplash();
